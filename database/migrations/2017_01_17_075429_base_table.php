@@ -17,7 +17,7 @@ class BaseTable extends Migration
             $table->bigIncrements('service_id')->unsigned();
             $table->string('service_name')->comment('套餐名');
             $table->tinyInteger('service_type')->unsigned()->default(1)->comment('服务类型，1按流量(M)，2按时长(天)');
-            $table->tinyInteger('service_val')->unsigned()->comment('服务值(流量或者天数)');
+            $table->integer('service_val')->unsigned()->comment('服务值(流量或者天数)');
             $table->tinyInteger('service_status')->unsigned()->default(1)->comment('服务状态，1可用，2不可用');
             $table->decimal('service_money', 8, 2)->default(0)->comment('服务费用');
         });
