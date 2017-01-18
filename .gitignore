@@ -8,3 +8,7 @@ Homestead.yaml
 .env
 /.DS_Store
 */.DS_Store
+public/build/
+public/css/app.css.map
+public/css/
+public/js/
