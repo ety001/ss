@@ -10,8 +10,10 @@
         <link rel="stylesheet" href="{{ elixir('css/app.css') }}">
     </head>
     <body>
-        <div id="app">
-            <example></example>
+        <div style="display:none;"><img src="icon.png"></div>
+        <div class="container" id="app">
+            <topnav></topnav>
+            <router-view></router-view>
         </div>
         <script src="{{ elixir('js/app.js') }}"></script>
     </body>
