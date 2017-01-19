@@ -20,3 +20,15 @@
         </div>
     </div>
 </template>
+<style>
+    .header {
+        margin-bottom: 30px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .header h3 {
+        padding-bottom: 19px;
+        margin-top: 0;
+        margin-bottom: 0;
+        line-height: 40px;
+    }
+</style>
