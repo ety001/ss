@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\CreateReginKey::class,
+        Commands\ListReginKey::class,
     ];
 
     /**
