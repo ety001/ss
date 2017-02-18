@@ -33,6 +33,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            //\Illuminate\Session\Middleware\StartSession::class,
+            //\App\Http\Middleware\VerifyCsrfToken::class,
             'throttle:60,1',
             'bindings',
         ],

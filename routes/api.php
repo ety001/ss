@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
+Route::get('test', function(Request $request) {
+    Log::info('test_api');
+    return 'hello world';
+});
+
+Route::get('user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
+
+Route::post('regin', function(Request $request) {
+    $input = $request->all();
+    //Log::info('UU:'.var_export($request, true));
+});
