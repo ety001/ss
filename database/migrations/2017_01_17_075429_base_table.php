@@ -35,7 +35,7 @@ class BaseTable extends Migration
             $table->string('email')->unique();
             $table->tinyInteger('email_chk')->unsigned()->default(0);
             $table->integer('create_time');
-            $table->tinyInteger('ssport');
+            $table->integer('ssport');
             $table->string('sspass');
             $table->decimal('money_amount', 8, 2)->default(0)->comment('余额');
             $table->bigInteger('service_id')->unsigned()->index()->nullable()->comment('购买的服务id');
