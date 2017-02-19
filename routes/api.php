@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserRegin;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 
 Route::get('test', function(Request $request) {
     Log::info('test_api');
+    Mail::to('ety001@domyself.me')->send(new UserRegin());
     return 'hello world';
 });
 
