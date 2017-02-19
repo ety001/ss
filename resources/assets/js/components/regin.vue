@@ -96,7 +96,7 @@
                             var resBody = res.body;
                                 switch (resBody.status) {
                                     case true:
-
+                                        this.alert(resBody.msg[0], 'success');
                                         break;
                                     case false:
                                         var msg = [];
