@@ -6,28 +6,28 @@
                     <div>
                         <div class="form-group">
                             <label for="regin">邀请码</label>&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#inviteCode">获取</a>
-                            <input type="text" class="form-control" v-model="userinfo.regin">
+                            <input id="regin" type="text" class="form-control" v-model="userinfo.regin">
                         </div>
                         <div class="form-group">
                             <label for="username">用户名</label>
-                            <input type="text" class="form-control" v-model="userinfo.username">
+                            <input id="username" type="text" class="form-control" v-model="userinfo.username">
                         </div>
                         <div class="form-group">
                             <label for="password">密码</label>
-                            <input type="password" class="form-control" v-model="userinfo.password">
+                            <input id="password" type="password" class="form-control" v-model="userinfo.password">
                         </div>
                         <div class="form-group">
-                            <label for="repassword">再输入一遍密码</label>
-                            <input type="password" class="form-control" v-model="userinfo.repassword">
+                            <label for="password_confirmation">再输入一遍密码</label>
+                            <input id="password_confirmation" type="password" class="form-control" v-model="userinfo.password_confirmation">
                         </div>
                         <div class="form-group">
                             <label for="email">邮箱地址</label>
-                            <input type="email" class="form-control" v-model="userinfo.email">
+                            <input id="email" type="email" class="form-control" v-model="userinfo.email">
                             <p class="help-block">请正确填写您的邮箱地址，邮箱将用来接收重要通知，<code>且邮箱验证通过后才可开通服务</code>。</p>
                         </div>
                         <div class="form-group">
                             <label for="sspass">Shadowsocks密码</label>
-                            <input type="text" class="form-control" v-model="userinfo.sspass">
+                            <input id="sspass" type="text" class="form-control" v-model="userinfo.sspass">
                             <p class="help-block">设置您的Shadowsocks登陆密码（设置后不可修改）</p>
                         </div>
                         <button class="btn btn-default" @click="register">提交注册</button>
@@ -75,7 +75,7 @@
                     regin: '',
                     username: '',
                     password: '',
-                    repassword: '',
+                    password_confirmation: '',
                     email: '',
                     sspass: ''
                 },
@@ -94,7 +94,18 @@
                     switch (res.status) {
                         case 200:
                             var resBody = res.body;
-                                console.log(resBody);
+                                switch (resBody.status) {
+                                    case true:
+
+                                        break;
+                                    case false:
+                                        var msg = [];
+                                        for(var i in resBody.msg){
+                                            msg.push(resBody.msg[i]);
+                                        }
+                                        this.alert(msg.join(', '), 'danger');
+                                        break;
+                                }
                             break;
                     }
                 }, err_res => {
@@ -107,7 +118,7 @@
 
                     }
                 });
-                console.log('hello world', this.userinfo);
+                //console.log('hello world', this.userinfo);
             },
             alert(msg, status, timeout) {
                 var that = this;
@@ -118,7 +129,7 @@
                     that.alertDisplay = false;
                     that.alertMsg = '';
                     that.alertStatus = '';
-                }, timeout ? timeout : 3000);
+                }, timeout ? timeout : 5000);
             }
         }
     }
