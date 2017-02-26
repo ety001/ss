@@ -96,7 +96,7 @@
                             var resBody = res.body;
                                 switch (resBody.status) {
                                     case true:
-                                        this.alert(resBody.msg[0], 'success');
+                                        this.alert(resBody.msg[0], 'success', '/#/login', 5000);
                                         break;
                                     case false:
                                         var msg = [];
@@ -120,7 +120,7 @@
                 });
                 //console.log('hello world', this.userinfo);
             },
-            alert(msg, status, timeout) {
+            alert(msg, status, jump, timeout) {
                 var that = this;
                 this.alertDisplay = true;
                 this.alertMsg = msg;
@@ -129,6 +129,9 @@
                     that.alertDisplay = false;
                     that.alertMsg = '';
                     that.alertStatus = '';
+                    if(jump!=undefined) {
+                        window.location = jump;
+                    }
                 }, timeout ? timeout : 5000);
             }
         }

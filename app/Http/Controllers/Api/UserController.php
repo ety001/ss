@@ -117,7 +117,7 @@ class UserController extends Controller
 
 
         //Return
-        $result = ['status'=>true, 'data'=>[], 'msg'=>['注册成功, 正在登录...']];
+        $result = ['status'=>true, 'data'=>[], 'msg'=>['注册成功, 正在跳转...']];
         return $result;
     }
 }
