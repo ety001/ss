@@ -9,6 +9,7 @@ use Validator;
 use Exception;
 use DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 use App\Model\ReginKey;
 use App\Model\User;
@@ -118,6 +119,44 @@ class UserController extends Controller
 
         //Return
         $result = ['status'=>true, 'data'=>[], 'msg'=>['注册成功, 正在跳转...']];
+        return $result;
+    }
+
+    public function Login(Request $request) {
+        $input = $request->all();
+        $rules = [
+            'username' => 'required',
+            'password' => 'required'
+        ];
+        $messages = [
+            'username.required' => '用户名是必填项',
+            'password.required' => '密码是必填项'
+        ];
+        $v = Validator::make($input, $rules, $messages);
+        if ($v->fails()) {
+            $errors_info = $v->errors()->all();
+            $result = ['status'=>false, 'data'=>[], 'msg'=>$errors_info];
+            return $result;
+        }
+        if (Auth::attempt(['username' => $input['username'], 'password' => $input['password']])) {
+            // Authentication passed
+            $result = ['status'=>true, 'data'=>[], 'msg'=>['登录成功，正在跳转中...']];
+        } else {
+            $user_lib = User::where('username', $input['username'])->first();
+            if( $user_lib && ($user_lib->password === md5($input['password'])) ) {
+                // Authentication passed and change md5 hash to the bcrypt hash
+                $user_lib->password = bcrypt($input['password']);
+                $user_lib->save();
+                $result = ['status'=>true, 'data'=>[], 'msg'=>['登录成功，正在跳转中...']];
+            } else {
+                $result = ['status'=>false, 'data'=>[], 'msg'=>['用户名或密码错误']];
+            }
+        }
+
+        if($result['status']===true) {
+
+        }
+
         return $result;
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="row marketing">
         <div class="col-md-8 col-md-offset-2">
-            <div class="row" style="margin-bottom: 10px;">
+            <div class="row">
                 <div class="col-md-8 col-md-offset-2">
                     <div>
                         <div class="form-group">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top: 10px;">
                 <div class="col-md-8 col-md-offset-2">
                     <transition name="fade">
                         <alert-component :displayTag="alertDisplay" :className="alertStatus">{{ alertMsg }}</alert-component>
