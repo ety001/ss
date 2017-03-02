@@ -32,7 +32,8 @@
         </div>
         <script>
             var Laravel = {
-                csrfToken: ''
+                csrfToken: '',
+                baseURL: '/api'
             };
         </script>
         <script src="{{ elixir('js/app.js') }}"></script>
