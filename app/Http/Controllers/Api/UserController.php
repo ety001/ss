@@ -140,14 +140,16 @@ class UserController extends Controller
         }
         if (Auth::attempt(['username' => $input['username'], 'password' => $input['password']])) {
             // Authentication passed
-            $result = ['status'=>true, 'data'=>[], 'msg'=>['登录成功，正在跳转中...']];
+            $token = $this->create_token( Auth::user() );
+            $result = ['status'=>true, 'data'=>['token'=>$token], 'msg'=>['登录成功，正在跳转中...']];
         } else {
             $user_lib = User::where('username', $input['username'])->first();
             if( $user_lib && ($user_lib->password === md5($input['password'])) ) {
                 // Authentication passed and change md5 hash to the bcrypt hash
                 $user_lib->password = bcrypt($input['password']);
                 $user_lib->save();
-                $result = ['status'=>true, 'data'=>[], 'msg'=>['登录成功，正在跳转中...']];
+                $token = $this->create_token( Auth::user() );
+                $result = ['status'=>true, 'data'=>['token'=>$token], 'msg'=>['登录成功，正在跳转中...']];
             } else {
                 $result = ['status'=>false, 'data'=>[], 'msg'=>['用户名或密码错误']];
             }
@@ -158,5 +160,13 @@ class UserController extends Controller
         }
 
         return $result;
+    }
+
+    private function create_token($user)
+    {
+        $user->api_token = str_random(60);
+        $user->expired_time = time() + config('auth.guards.api.expire');
+        $user->save();
+        return ['val'=>$user->api_token, 'expired'=>$user->expired_time];
     }
 }
