@@ -154,11 +154,6 @@ class UserController extends Controller
                 $result = ['status'=>false, 'data'=>[], 'msg'=>['用户名或密码错误']];
             }
         }
-
-        if($result['status']===true) {
-
-        }
-
         return $result;
     }
 
