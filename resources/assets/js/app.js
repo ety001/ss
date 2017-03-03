@@ -24,12 +24,20 @@ const indexComponent = Vue.component('index', require('./components/index.vue'))
 const loginComponent = Vue.component('login', require('./components/login.vue'));
 const reginComponent = Vue.component('regin', require('./components/regin.vue'));
 const userComponent = Vue.component('user', require('./components/user.vue'));
+const payComponent = Vue.component('pay', require('./components/pay.vue'));
+const serviceComponent = Vue.component('service', require('./components/service.vue'));
+const downloadComponent = Vue.component('download', require('./components/download.vue'));
+const exitComponent = Vue.component('exit', require('./components/exit.vue'));
 
 const routes = [
     { path: '/', component: indexComponent, meta: { requiresAuth: false } },
     { path: '/login', component: loginComponent, meta: { requiresAuth: false } },
     { path: '/regin', component: reginComponent, meta: { requiresAuth: false } },
     { path: '/user', component: userComponent, meta: { requiresAuth: true } },
+    { path: '/pay', component: payComponent, meta: { requiresAuth: true } },
+    { path: '/service', component: serviceComponent, meta: { requiresAuth: true } },
+    { path: '/download', component: downloadComponent, meta: { requiresAuth: true } },
+    { path: '/exit', component: exitComponent, meta: { requiresAuth: true } },
 ];
 
 const router = new VueRouter({
@@ -94,7 +102,7 @@ const app = new Vue({
     watch: {
         login(val) {
             if(val==true){
-                this.$router.push({path:'/user'});
+                this.$router.push({path:'user'});
             }
         }
     },

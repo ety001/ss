@@ -5,7 +5,21 @@
                 <nav>
                     <ul class="nav nav-pills pull-right"
                     v-if="islogin">
-
+                        <router-link tag="li" to="/user" exact active-class="active">
+                            <a>面板</a>
+                        </router-link>
+                        <router-link tag="li" to="/pay" active-class="active">
+                            <a>充值</a>
+                        </router-link>
+                        <router-link tag="li" to="/service" active-class="active">
+                            <a>服务</a>
+                        </router-link>
+                        <router-link tag="li" to="/download" active-class="active">
+                            <a>下载</a>
+                        </router-link>
+                        <router-link tag="li" to="/exit" active-class="active">
+                            <a>退出</a>
+                        </router-link>
                     </ul>
                     <ul class="nav nav-pills pull-right"
                     v-else>

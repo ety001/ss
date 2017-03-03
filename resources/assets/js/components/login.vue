@@ -64,12 +64,13 @@
                                             resBody.data.user.v,
                                             d
                                         );
-                                        this.alert(
-                                            resBody.msg[0],
-                                            'success',
-                                            '/user',
-                                            3000
-                                        );
+                                        this.$parent.login_status = true;
+                                        // this.alert(
+                                        //     resBody.msg[0],
+                                        //     'success',
+                                        //     'user',
+                                        //     3000
+                                        // );
                                         break;
                                     case false:
                                         let msg = [];
