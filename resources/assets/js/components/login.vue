@@ -56,7 +56,7 @@
                             var resBody = res.body;
                                 switch (resBody.status) {
                                     case true:
-                                        this.alert(resBody.msg[0], 'success', '/#/', 5000);
+                                        this.alert(resBody.msg[0], 'success', '/#/user', 4000);
                                         break;
                                     case false:
                                         var msg = [];

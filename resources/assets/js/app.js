@@ -7,7 +7,7 @@
 
 require('./bootstrap');
 
-const VueRouter =  require('vue-router');
+import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 /**
