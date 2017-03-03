@@ -50,34 +50,37 @@
         methods: {
             login() {
                 var that = this;
-                this.$http.post('login', this.userinfo).then(res => {
-                    switch (res.status) {
-                        case 200:
-                            var resBody = res.body;
-                                switch (resBody.status) {
-                                    case true:
-                                        this.alert(resBody.msg[0], 'success', '/#/user', 4000);
-                                        break;
-                                    case false:
-                                        var msg = [];
-                                        for(var i in resBody.msg){
-                                            msg.push(resBody.msg[i]);
-                                        }
-                                        this.alert(msg.join(', '), 'danger');
-                                        break;
-                                }
-                            break;
-                    }
-                }, err_res => {
-                    // error callback
-                    switch (err_res.status) {
-                        case 500:
-                            console.log('服务端错误');
-                            break;
-                        default:
+                axios.post('login', this.userinfo)
+                    .then(res => {
+                        switch (res.status) {
+                            case 200:
+                                var resBody = res.data;
+                                    switch (resBody.status) {
+                                        case true:
+                                            this.alert(resBody.msg[0], 'success', '/#/user', 4000);
+                                            break;
+                                        case false:
+                                            var msg = [];
+                                            for(var i in resBody.msg){
+                                                msg.push(resBody.msg[i]);
+                                            }
+                                            this.alert(msg.join(', '), 'danger');
+                                            break;
+                                    }
+                                break;
+                        }
+                    })
+                    .catch (err_res => {
+                        // error callback
+                        switch (err_res.status) {
+                            case 500:
+                                this.alert('服务端错误', 'danger');
+                                console.log('服务端错误');
+                                break;
+                            default:
 
-                    }
-                });
+                        }
+                    });
                 //console.log('hello world', this.userinfo);
             },
             alert(msg, status, jump, timeout) {
