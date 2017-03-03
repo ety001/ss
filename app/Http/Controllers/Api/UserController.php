@@ -91,7 +91,7 @@ class UserController extends Controller
         //Update ReginKey
         try {
             $regin_key_obj->status = 1;
-            $regin_key_obj->user_id = $user_obj->id;
+            $regin_key_obj->user_id = $user_obj->user_id;
             $regin_key_obj->usetime = time();
             $regin_key_obj->save();
         } catch (Exception $e) {
