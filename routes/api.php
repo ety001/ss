@@ -30,7 +30,8 @@ Route::post('regin', 'Api\UserController@Regin')->name('regin');
 
 Route::post('login', 'Api\UserController@Login')->name('login');
 
-Route::group(['middleware' => ['auth:api']], function()
+Route::group(['middleware' => ['auth.api']], function()
 {
-    // API routes here
+    Route::get('auth', 'Api\UserController@Auth')->name('auth');
+    Route::get('user', 'Api\UserController@Dashboard')->name('user_dashboard');
 });

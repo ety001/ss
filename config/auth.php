@@ -44,7 +44,7 @@ return [
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
-            'expire' => 3*24*3600,
+            'expire' => 1*24*3600,
         ],
     ],
 
