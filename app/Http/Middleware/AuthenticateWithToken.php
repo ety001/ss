@@ -35,6 +35,7 @@ class AuthenticateWithToken
                 'msg'=>'Token超时.'
             ]);
         }
+        Auth::setUser($user);
         return $next($request);
     }
 }
