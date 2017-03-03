@@ -10,8 +10,8 @@ require('./bootstrap');
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-import VueCookie from 'vue-cookie';
-Vue.use(VueCookie);
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,8 +37,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!auth.loggedIn()) {
+    if ( to.matched.some(record => record.meta.requiresAuth) ) {
+        if (!auth.check()) {
             next({
                 path: '/login',
                 query: { redirect: to.fullPath }
@@ -51,12 +51,60 @@ router.beforeEach((to, from, next) => {
     }
 });
 
+window.auth = {
+    check () {
+        if(VueCookies.get('user_token')) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    authToken () {
+        let user_token = VueCookies.get('user_token');
+        if(user_token) {
+            axios.post('auth', {api_token: user_token})
+                .then(res => {
+                    switch (res.status) {
+                        case 200:
+                            let resBody = res.data;
+                            switch (resBody.status) {
+                                case true:
+                                    app.login = true;
+                                    break;
+                                case false:
+                                    app.login = false;
+                                    break;
+                            }
+                            break;
+                    }
+                })
+                .catch(err_res => {
+                    app.login = false;
+                });
+        } else {
+            return false;
+        }
+    }
+}
+
 const app = new Vue({
     el: '#app',
     data: {
+        login: false
     },
     router,
     methods: {
 
-    }
+    },
+    watch: {
+        login(val) {
+            if(val==true){
+                this.$router.push({path:'user'});
+            }
+        }
+    },
+    created () {
+        // 创建完后获取数据
+        auth.authToken();
+    },
 });

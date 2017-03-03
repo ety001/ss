@@ -32,6 +32,6 @@ Route::post('login', 'Api\UserController@Login')->name('login');
 
 Route::group(['middleware' => ['auth.api']], function()
 {
-    Route::get('auth', 'Api\UserController@Auth')->name('auth');
-    Route::get('user', 'Api\UserController@Dashboard')->name('user_dashboard');
+    Route::post('auth', 'Api\UserController@Auth')->name('auth');
+    Route::post('user', 'Api\UserController@Dashboard')->name('user_dashboard');
 });

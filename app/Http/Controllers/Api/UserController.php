@@ -141,7 +141,7 @@ class UserController extends Controller
         if (Auth::attempt(['username' => $input['username'], 'password' => $input['password']])) {
             // Authentication passed
             $token = $this->create_token( Auth::user() );
-            $result = ['status'=>true, 'data'=>['token'=>$token], 'msg'=>['登录成功，正在跳转中...']];
+            $result = ['status'=>true, 'data'=>['user'=>$token], 'msg'=>['登录成功，正在跳转中...']];
         } else {
             $user_lib = User::where('username', $input['username'])->first();
             if( $user_lib && ($user_lib->password === md5($input['password'])) ) {
@@ -149,7 +149,7 @@ class UserController extends Controller
                 $user_lib->password = bcrypt($input['password']);
                 $user_lib->save();
                 $token = $this->create_token( Auth::user() );
-                $result = ['status'=>true, 'data'=>['token'=>$token], 'msg'=>['登录成功，正在跳转中...']];
+                $result = ['status'=>true, 'data'=>['user'=>$token], 'msg'=>['登录成功，正在跳转中...']];
             } else {
                 $result = ['status'=>false, 'data'=>[], 'msg'=>['用户名或密码错误']];
             }
@@ -157,11 +157,42 @@ class UserController extends Controller
         return $result;
     }
 
+    public function Dashboard(Request $request)
+    {
+        return Auth::user();
+    }
+
+    public function Auth(Request $request)
+    {
+        if(Auth::user()) {
+            return [
+                'status'=>true,
+                'data'=>[
+                    'user'=>[
+                        'v' => Auth::user()->api_token,
+                        'expired' => Auth::user()->expired_time
+                    ]
+                ],
+                'msg'=>''
+            ];
+        } else {
+            Log::error('Token Error');
+            return [
+                'status'=>false,
+                'data'=>[],
+                'msg'=>'Token 错误. 接口需要权限验证'
+            ];
+        }
+    }
+
     private function create_token($user)
     {
         $user->api_token = str_random(60);
         $user->expired_time = time() + config('auth.guards.api.expire');
         $user->save();
-        return ['val'=>$user->api_token, 'expired'=>$user->expired_time];
+        return [
+            'v'=>$user->api_token,
+            'expired'=>$user->expired_time
+        ];
     }
 }

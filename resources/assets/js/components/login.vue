@@ -49,24 +49,36 @@
         },
         methods: {
             login() {
-                var that = this;
+                let that = this;
                 axios.post('login', this.userinfo)
                     .then(res => {
                         switch (res.status) {
                             case 200:
-                                var resBody = res.data;
-                                    switch (resBody.status) {
-                                        case true:
-                                            this.alert(resBody.msg[0], 'success', '/#/user', 4000);
-                                            break;
-                                        case false:
-                                            var msg = [];
-                                            for(var i in resBody.msg){
-                                                msg.push(resBody.msg[i]);
-                                            }
-                                            this.alert(msg.join(', '), 'danger');
-                                            break;
-                                    }
+                                let resBody = res.data;
+                                switch (resBody.status) {
+                                    case true:
+                                        let d = new Date();
+                                        d.setTime(resBody.data.user.expired*1000);
+                                        this.$cookies.set(
+                                            'user_token',
+                                            resBody.data.user.v,
+                                            d
+                                        );
+                                        this.alert(
+                                            resBody.msg[0],
+                                            'success',
+                                            'user',
+                                            3000
+                                        );
+                                        break;
+                                    case false:
+                                        let msg = [];
+                                        for(let i in resBody.msg){
+                                            msg.push(resBody.msg[i]);
+                                        }
+                                        this.alert(msg.join(', '), 'danger');
+                                        break;
+                                }
                                 break;
                         }
                     })
@@ -74,7 +86,7 @@
                         // error callback
                         switch (err_res.status) {
                             case 500:
-                                this.alert('服务端错误', 'danger');
+                                this.alert('服务端错误', 'danger', undefined, 3000);
                                 console.log('服务端错误');
                                 break;
                             default:
@@ -84,7 +96,7 @@
                 //console.log('hello world', this.userinfo);
             },
             alert(msg, status, jump, timeout) {
-                var that = this;
+                let that = this;
                 this.alertDisplay = true;
                 this.alertMsg = msg;
                 this.alertStatus = status;
@@ -93,7 +105,7 @@
                     that.alertMsg = '';
                     that.alertStatus = '';
                     if(jump!=undefined) {
-                        window.location = jump;
+                        that.$router.push({ path: jump });
                     }
                 }, timeout ? timeout : 5000);
             }
