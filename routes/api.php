@@ -29,3 +29,8 @@ Route::get('user', function (Request $request) {
 Route::post('regin', 'Api\UserController@Regin')->name('regin');
 
 Route::post('login', 'Api\UserController@Login')->name('login');
+
+Route::group(['middleware' => ['auth:api']], function()
+{
+    // API routes here
+});
