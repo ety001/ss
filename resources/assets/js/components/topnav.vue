@@ -3,7 +3,12 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="header">
                 <nav>
-                    <ul class="nav nav-pills pull-right">
+                    <ul class="nav nav-pills pull-right"
+                    v-if="islogin">
+
+                    </ul>
+                    <ul class="nav nav-pills pull-right"
+                    v-else>
                         <router-link tag="li" to="/" exact active-class="active">
                             <a>首页</a>
                         </router-link>
@@ -32,3 +37,8 @@
         line-height: 40px;
     }
 </style>
+<script>
+export default {
+    props: ['islogin'],
+}
+</script>

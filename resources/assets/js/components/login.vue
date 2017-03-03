@@ -67,7 +67,7 @@
                                         this.alert(
                                             resBody.msg[0],
                                             'success',
-                                            'user',
+                                            '/user',
                                             3000
                                         );
                                         break;

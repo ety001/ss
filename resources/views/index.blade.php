@@ -12,7 +12,7 @@
     <body>
         <div style="display:none;"><img src="icon.png"></div>
         <div class="container" id="app">
-            <topnav></topnav>
+            <topnav :islogin="login_status"></topnav>
             <router-view></router-view>
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
