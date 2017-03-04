@@ -3,17 +3,56 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <div class="form">
-                        <div class="form-group">
-                            <label for="username">用户名</label>
-                            <input type="text" class="form-control" @keyup.enter="login" v-model="userinfo.username">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">密码</label>
-                            <input type="password" class="form-control" @keyup.enter="login" v-model="userinfo.password">
-                        </div>
-                        <button class="btn btn-primary" @click="login">登录</button>
-                    </div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr class="success">
+                                <td>
+                                    余额：
+                                    <code>71314</code> RMB
+                                    <a href="/user-order.html">充值</a>
+                                </td>
+                                <td>
+                                    服务状态：
+                                    已开通服务 <code>D360型套餐</code>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr class="warning">
+                                <td>D1型套餐</td>
+                                <td>1 天</td>
+                                <td>1 RMB</td>
+                                <td><a href="/user-buysave-service_id-1.html" onclick="if(!confirm('是否要购买 D1型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                            </tr>
+                            <tr class="warning">
+                                <td>D7型套餐</td>
+                                <td>7 天</td>
+                                <td>3 RMB</td>
+                                <td><a href="/user-buysave-service_id-2.html" onclick="if(!confirm('是否要购买 D7型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                            </tr>
+                            <tr class="warning">
+                                <td>D30型套餐</td>
+                                <td>30 天</td>
+                                <td>10 RMB</td>
+                                <td><a href="/user-buysave-service_id-3.html" onclick="if(!confirm('是否要购买 D30型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                            </tr>
+                            <tr class="warning">
+                                <td>D90型套餐</td>
+                                <td>90 天</td>
+                                <td>30 RMB</td>
+                                <td><a href="/user-buysave-service_id-4.html" onclick="if(!confirm('是否要购买 D90型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                            </tr>
+                            <tr class="warning">
+                                <td>D360型套餐</td>
+                                <td>360 天</td>
+                                <td>60 RMB</td>
+                                <td><a href="/user-buysave-service_id-5.html" onclick="if(!confirm('是否要购买 D360型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px;">
@@ -35,10 +74,6 @@
     export default {
         data() {
             return {
-                userinfo: {
-                    username: '',
-                    password: ''
-                },
                 alertDisplay: false,
                 alertMsg: '',
                 alertStatus: ''
@@ -48,53 +83,6 @@
             'alert-component': alertComponent
         },
         methods: {
-            login() {
-                let that = this;
-                axios.post('login', this.userinfo)
-                    .then(res => {
-                        switch (res.status) {
-                            case 200:
-                                let resBody = res.data;
-                                switch (resBody.status) {
-                                    case true:
-                                        let d = new Date();
-                                        d.setTime(resBody.data.user.expired*1000);
-                                        this.$cookies.set(
-                                            'user_token',
-                                            resBody.data.user.v,
-                                            d
-                                        );
-                                        this.alert(
-                                            resBody.msg[0],
-                                            'success',
-                                            'user',
-                                            3000
-                                        );
-                                        break;
-                                    case false:
-                                        let msg = [];
-                                        for(let i in resBody.msg){
-                                            msg.push(resBody.msg[i]);
-                                        }
-                                        this.alert(msg.join(', '), 'danger');
-                                        break;
-                                }
-                                break;
-                        }
-                    })
-                    .catch (err_res => {
-                        // error callback
-                        switch (err_res.status) {
-                            case 500:
-                                this.alert('服务端错误', 'danger', undefined, 3000);
-                                console.log('服务端错误');
-                                break;
-                            default:
-
-                        }
-                    });
-                //console.log('hello world', this.userinfo);
-            },
             alert(msg, status, jump, timeout) {
                 let that = this;
                 this.alertDisplay = true;

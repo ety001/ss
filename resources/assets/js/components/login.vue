@@ -69,7 +69,7 @@
                                         //     resBody.msg[0],
                                         //     'success',
                                         //     'user',
-                                        //     3000
+                                        //     1000
                                         // );
                                         break;
                                     case false:
