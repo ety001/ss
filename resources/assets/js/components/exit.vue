@@ -30,13 +30,13 @@ p {
             window.msg_point = function () {
                 that.msg = that.msg + '.';
             }
-            let msg_interval = setInterval("window.msg_point()",1000);
+            let msg_interval = setInterval("window.msg_point()",500);
             setTimeout(function(){
                 that.$cookies.remove('user_token');
                 that.$parent.login_status = false;
                 window.clearInterval(msg_interval);
                 that.$router.push({path:'/'});
-            }, 5000);
+            }, 2000);
         }
     }
 </script>

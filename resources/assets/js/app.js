@@ -46,15 +46,45 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if ( to.matched.some(record => record.meta.requiresAuth) ) {
-        if (!router.app.login_status) {
-            next({
-                path: '/login',
-                query: { redirect: to.fullPath }
-            });
+        let user_token = VueCookies.get('user_token');
+        console.log(user_token);
+        if(user_token) {
+            axios.post('auth', {api_token: user_token})
+                .then(res => {
+                    switch (res.status) {
+                        case 200:
+                            let resBody = res.data;
+                            switch (resBody.status) {
+                                case true:
+                                    router.app.login_status = true;
+                                    next();
+                                    break;
+                                case false:
+                                    router.app.login_status = false;
+                                    next({
+                                        path: '/login',
+                                        //query: { redirect: to.fullPath }
+                                    });
+                                    break;
+                            }
+                            break;
+                    }
+                })
+                .catch(err_res => {
+                    router.app.login_status = false;
+                    next({
+                        path: '/login'
+                    });
+                });
         } else {
-            next();
+            router.app.login_status = false;
+            next({
+                path: '/login'
+            });
+            return false;
         }
     } else {
+        //console.log(router.app.login_status);
         if (router.app.login_status) {
             next({
                 path: '/user'
@@ -72,32 +102,6 @@ const app = new Vue({
     },
     router,
     methods: {
-        authToken () {
-            let user_token = this.$cookies.get('user_token');
-            if(user_token) {
-                axios.post('auth', {api_token: user_token})
-                    .then(res => {
-                        switch (res.status) {
-                            case 200:
-                                let resBody = res.data;
-                                switch (resBody.status) {
-                                    case true:
-                                        this.login_status = true;
-                                        break;
-                                    case false:
-                                        this.login_status = false;
-                                        break;
-                                }
-                                break;
-                        }
-                    })
-                    .catch(err_res => {
-                        this.login_status = false;
-                    });
-            } else {
-                return false;
-            }
-        }
     },
     watch: {
         login(val) {
@@ -105,10 +109,5 @@ const app = new Vue({
                 this.$router.push({path:'user'});
             }
         }
-    },
-    created () {
-        // 创建完后获取数据
-        this.authToken();
-    },
-    delimiters: ['${', '}']
+    }
 });

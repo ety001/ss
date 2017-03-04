@@ -64,13 +64,16 @@
                                             resBody.data.user.v,
                                             d
                                         );
-                                        this.$parent.login_status = true;
-                                        // this.alert(
-                                        //     resBody.msg[0],
-                                        //     'success',
-                                        //     'user',
-                                        //     1000
-                                        // );
+                                        this.alert(
+                                            resBody.msg[0],
+                                            'success',
+                                            undefined,
+                                            1500
+                                        );
+                                        setTimeout(function(){
+                                            that.$parent.login_status = true;
+                                            that.$router.push({ path: 'user' });
+                                        }, 2000);
                                         break;
                                     case false:
                                         let msg = [];
