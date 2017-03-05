@@ -16,3 +16,4 @@ public/fonts/
 public/mix-manifest.json
 composer.lock
 public/hot
+npm-debug.log
