@@ -114,7 +114,6 @@
             let that = this;
             axios.post('user', {api_token: user_token})
                 .then(res => {
-                    console.log(res);
                     switch (res.status) {
                         case 200:
                             let data = res.data;

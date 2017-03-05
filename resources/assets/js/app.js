@@ -47,7 +47,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     if ( to.matched.some(record => record.meta.requiresAuth) ) {
         let user_token = VueCookies.get('user_token');
-        console.log(user_token);
         if(user_token) {
             axios.post('auth', {api_token: user_token})
                 .then(res => {
