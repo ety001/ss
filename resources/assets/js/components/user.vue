@@ -7,40 +7,64 @@
                         <tbody>
                             <tr class="success">
                                 <td>用户登录名</td>
-                                <td>ety001</td>
+                                <td>{{ username }}</td>
                             </tr>
                             <tr class="success">
                                 <td>用户类型</td>
-                                <td>VIP</td>
+                                <td>{{ user_type }}</td>
                             </tr>
                             <tr class="success">
                                 <td>用户余额</td>
                                 <td>
-                                    <code>71314</code> RMB
-                                    <a href="/user-order.html">充值</a>
+                                    <code>{{ money_amount }}</code> RMB
+                                    <router-link to="/pay">充值</router-link>
                                 </td>
                             </tr>
                             <tr class="warning">
                                 <td>服务状态</td>
-                                <td>
-                                    已开通服务 <code>D360型套餐</code>
+                                <td v-if="current_service">
+                                    已开通服务 <code>{{ current_service.service.service_name }}</code>
+                                </td>
+                                <td v-else>
+                                    还未开通服务，
+                                    <router-link to="/service">点击这里</router-link>
+                                    去购买服务
                                 </td>
                             </tr>
                             <tr class="warning">
                                 <td>服务开始时间</td>
-                                <td>
-                                    2017-01-07 10:01:15
+                                <td v-if="current_service">
+                                    {{ current_service.buy_time }}
+                                </td>
+                                <td v-else>
+                                    --
                                 </td>
                             </tr>
                             <tr class="warning">
                                 <td>服务到期时间</td>
-                                <td>
-                                    2018-01-02 10:01:15
+                                <td v-if="current_service">
+                                    {{ current_service.end_time }}
+                                </td>
+                                <td v-else>
+                                    --
                                 </td>
                             </tr>
                             <tr class="warning">
                                 <td>服务运行状态</td>
-                                <td><code>正在运行</code></td>
+                                <td v-if="current_service">
+                                    <template>
+                                        <code>正在运行</code>
+                                    </template>
+                                    <template>
+                                        <code>已停止</code>
+                                        <button class="btn btn-mini">启动</button>
+                                    </template>
+                                </td>
+                                <td v-else>
+                                    还未开通服务，
+                                    <router-link to="/service">点击这里</router-link>
+                                    去购买服务
+                                </td>
                             </tr>
                             <tr class="info">
                                 <td>Shadowsocks 服务器地址</td>
@@ -48,11 +72,11 @@
                             </tr>
                             <tr class="info">
                                 <td>Shadowsocks 服务器端口</td>
-                                <td><code>10000</code></td>
+                                <td><code>{{ ssport }}</code></td>
                             </tr>
                             <tr class="info">
                                 <td>Shadowsocks 服务器密码</td>
-                                <td><code>woqimm</code></td>
+                                <td><code>{{ sspass }}</code></td>
                             </tr>
                             <tr class="info">
                                 <td>Shadowsocks 服务器加密方式</td>
@@ -83,8 +107,11 @@
             return {
                 username : null,
                 user_type : null,
+                ssport: null,
+                sspass: null,
                 money_amount : null,
-                service : null,
+                current_service : null,
+                service_status: null,
                 alertDisplay: false,
                 alertMsg: '',
                 alertStatus: ''
@@ -94,6 +121,15 @@
             'alert-component': alertComponent
         },
         methods: {
+            update_data(data) {
+                this.username = data.username;
+                this.user_type = data.user_type;
+                this.ssport = data.ssport;
+                this.sspass = data.sspass;
+                this.money_amount = data.money_amount;
+                this.current_service = data.current_service;
+                this.service_status = data.service_status;
+            },
             alert(msg, status, jump, timeout) {
                 let that = this;
                 this.alertDisplay = true;
@@ -114,12 +150,13 @@
             let that = this;
             axios.post('user', {api_token: user_token})
                 .then(res => {
+                    console.log(res);
                     switch (res.status) {
                         case 200:
                             let data = res.data;
                             switch (data.status) {
                                 case true:
-
+                                    that.update_data(data.data);
                                     break;
                                 case false:
 

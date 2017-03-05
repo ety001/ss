@@ -14,4 +14,8 @@ class BuyService extends Model
      */
     public $timestamps = false;
     protected $primaryKey = 'buyservice_id';
+
+    public function service() {
+        return $this->hasOne('App\Model\Services', 'service_id', 'service_id');
+    }
 }

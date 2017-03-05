@@ -162,6 +162,20 @@ class UserController extends Controller
         $user = Auth::user();
         $result = [
             'username' => $user->username,
+            'user_type' => $user->user_type_str(),
+            'money_amount' => $user->money_amount,
+            'current_service' => $user->buyservices()
+                                        ->where('status', 1)
+                                        ->orderBy('buyservice_id', 'desc')
+                                        ->first(),
+            'service_status' => false, // todo: cli checks wheather port is alive.
+            'ssport' => $user->ssport,
+            'sspass' => $user->sspass
+        ];
+        return [
+            'status'=>true,
+            'data'=>$result,
+            'msg'=>''
         ];
     }
 
