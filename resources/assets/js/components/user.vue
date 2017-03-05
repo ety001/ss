@@ -11,35 +11,36 @@
                             </tr>
                             <tr class="success">
                                 <td>用户类型</td>
-                                <td>
-                                  VIP        </td>
+                                <td>VIP</td>
                             </tr>
                             <tr class="success">
                                 <td>用户余额</td>
                                 <td>
-                                  <code>71314</code> RMB
-                                  <a href="/user-order.html">充值</a>
+                                    <code>71314</code> RMB
+                                    <a href="/user-order.html">充值</a>
                                 </td>
                             </tr>
                             <tr class="warning">
                                 <td>服务状态</td>
                                 <td>
-                                  已开通服务 <code>D360型套餐</code>        </td>
+                                    已开通服务 <code>D360型套餐</code>
+                                </td>
                             </tr>
                             <tr class="warning">
                                 <td>服务开始时间</td>
                                 <td>
-                                  2017-01-07 10:01:15        </td>
+                                    2017-01-07 10:01:15
+                                </td>
                             </tr>
                             <tr class="warning">
                                 <td>服务到期时间</td>
                                 <td>
-                                  2018-01-02 10:01:15        </td>
+                                    2018-01-02 10:01:15
+                                </td>
                             </tr>
                             <tr class="warning">
                                 <td>服务运行状态</td>
-                                <td>
-                                  <code>正在运行</code>        </td>
+                                <td><code>正在运行</code></td>
                             </tr>
                             <tr class="info">
                                 <td>Shadowsocks 服务器地址</td>
@@ -80,6 +81,10 @@
     export default {
         data() {
             return {
+                username : null,
+                user_type : null,
+                money_amount : null,
+                service : null,
                 alertDisplay: false,
                 alertMsg: '',
                 alertStatus: ''
@@ -89,9 +94,6 @@
             'alert-component': alertComponent
         },
         methods: {
-            login() {
-
-            },
             alert(msg, status, jump, timeout) {
                 let that = this;
                 this.alertDisplay = true;
@@ -106,6 +108,30 @@
                     }
                 }, timeout ? timeout : 5000);
             }
+        },
+        created() {
+            let user_token = this.$cookies.get('user_token');
+            let that = this;
+            axios.post('user', {api_token: user_token})
+                .then(res => {
+                    console.log(res);
+                    switch (res.status) {
+                        case 200:
+                            let data = res.data;
+                            switch (data.status) {
+                                case true:
+
+                                    break;
+                                case false:
+
+                                    break;
+                            }
+                            break;
+                    }
+                })
+                .catch(err_res => {
+                    console.log(err_res);
+                });
         }
     }
 </script>

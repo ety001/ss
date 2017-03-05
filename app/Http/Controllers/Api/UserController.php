@@ -159,7 +159,10 @@ class UserController extends Controller
 
     public function Dashboard(Request $request)
     {
-        return Auth::user();
+        $user = Auth::user();
+        $result = [
+            'username' => $user->username,
+        ];
     }
 
     public function Auth(Request $request)

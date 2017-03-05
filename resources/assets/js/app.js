@@ -10,8 +10,8 @@ require('./bootstrap');
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
+import VueCookies from 'vue-cookies';
+Vue.use(VueCookies);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
