@@ -37,4 +37,28 @@ class User extends Authenticatable
      * @var bool
      */
     public $timestamps = false;
+
+    public function user_type_str() {
+        $txt = [
+            1 => '普通',
+            2 => 'VIP'
+        ];
+        return $txt[$this->user_type];
+    }
+
+    /**
+     * Get current_service for the user.
+     */
+    public function service()
+    {
+        return $this->hasOne('App\Model\Services', 'service_id', 'service_id');
+    }
+
+    /**
+     * Get all of the buyservice for the user.
+     */
+    public function buyservices()
+    {
+        return $this->hasMany('App\Model\BuyService', 'user_id', 'user_id');
+    }
 }
