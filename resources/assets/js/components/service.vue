@@ -6,12 +6,12 @@
                     <table class="table table-bordered">
                         <tbody>
                             <tr class="success">
-                                <td>
+                                <td width="50%">
                                     余额：
-                                    <code>71314</code> RMB
-                                    <a href="/user-order.html">充值</a>
+                                    <code>{{ money_amount }}</code> RMB
+                                    <router-link to="/pay">充值</router-link>
                                 </td>
-                                <td>
+                                <td width="50%">
                                     服务状态：
                                     已开通服务 <code>D360型套餐</code>
                                 </td>
@@ -74,6 +74,7 @@
     export default {
         data() {
             return {
+                money_amount : null,
                 alertDisplay: false,
                 alertMsg: '',
                 alertStatus: ''
@@ -97,6 +98,30 @@
                     }
                 }, timeout ? timeout : 5000);
             }
+        },
+        created() {
+            let user_token = this.$cookies.get('user_token');
+            let that = this;
+            axios.post('user', {api_token: user_token})
+                .then(res => {
+                    //console.log(res);
+                    switch (res.status) {
+                        case 200:
+                            let data = res.data;
+                            switch (data.status) {
+                                case true:
+                                    that.money_amount = data.data.money_amount;
+                                    break;
+                                case false:
+
+                                    break;
+                            }
+                            break;
+                    }
+                })
+                .catch(err_res => {
+                    console.log(err_res);
+                });
         }
     }
 </script>

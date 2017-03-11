@@ -86,6 +86,12 @@
                     </table>
                 </div>
             </div>
+            <div class="col-md-12">
+                <div method="post" action="">
+                    <p><input class="form-control" type="email" name="email" value="<?php echo $user_info['email'];?>"></p>
+                    <p><input class="btn btn-primary" type="submit" value="重发验证邮件"></p>
+                </div>
+            </div>
             <div class="row" style="margin-top: 10px;">
                 <div class="col-md-8 col-md-offset-2">
                     <transition name="fade">
@@ -150,7 +156,7 @@
             let that = this;
             axios.post('user', {api_token: user_token})
                 .then(res => {
-                    console.log(res);
+                    //console.log(res);
                     switch (res.status) {
                         case 200:
                             let data = res.data;
