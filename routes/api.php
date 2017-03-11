@@ -18,8 +18,7 @@ use App\Mail\UserRegin;
 
 Route::get('test', function(Request $request) {
     Log::info('test_api');
-    Mail::to('ety001@domyself.me')->send(new UserRegin());
-    return 'hello world';
+    //return get_weidian_order_info('775013371427196');
 });
 
 Route::get('user', function (Request $request) {
