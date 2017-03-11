@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserRegin;
+
+use App\Libs\Cli;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,6 +20,7 @@ use App\Mail\UserRegin;
 
 Route::get('test', function(Request $request) {
     Log::info('test_api');
+    return Cli::test();
     //return get_weidian_order_info('775013371427196');
 });
 
