@@ -5,6 +5,8 @@ namespace App\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use Illuminate\Support\Facades\Log;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -60,5 +62,25 @@ class User extends Authenticatable
     public function buyservices()
     {
         return $this->hasMany('App\Model\BuyService', 'user_id', 'user_id');
+    }
+
+    public function chk_money($consumption=null){
+        if($consumption==null)return false;
+        if($consumption <= $this->money_amount) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function change_money($chg=0){
+        $origin_total = $this->money_amount;
+        $new_money_amount = $origin_total + $chg;
+        if($new_money_amount<0){
+            return false;
+        }
+        Log::info('change_money=>user_id:'.$this->id.', $chg:'.$chg.', origin_total:'.$origin_total);
+        $this->money_amount = $new_money_amount;
+        return $this->save();
     }
 }
