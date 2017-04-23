@@ -3,11 +3,16 @@ namespace App\Libs;
 
 class Cli
 {
+    private $debug = false;
     public $__command_tpl = '/usr/local/bin/ss-server -p %s -k %s -m aes-256-cfb --user www -t 600 --pid-file /tmp/shadowsocks_%s.pid  & ';
     //public $__command_tpl = "/usr/bin/ssserver -p %s -k %s -d %s --user www --log-file /tmp/shadowsocks.log --pid-file /tmp/shadowsocks_%s.pid";
     public function run($ssport, $sspass){
         $command    = sprintf($this->__command_tpl, $ssport, $sspass, $ssport);
-        exec($command);
+        if($this->debug==true) {
+            echo($command."\n");return;
+        } else {
+            exec($command);
+        }
     }
 
     public function stop($ssport, $sspass){
@@ -15,19 +20,31 @@ class Cli
         exec($command);*/
         $pid            = $this->get_pid($ssport);
         $command        = "kill {$pid}";
-        exec($command);
+        if($this->debug==true) {
+            echo($command."\n");return;
+        } else {
+            exec($command);
+        }
     }
 
     public function get_pid($ssport){
         //$command    = 'cat /tmp/shadowsocks_' . $ssport . '.pid';
         $command    = "ps aux | grep 'shadowsocks_{$ssport}' | grep -v grep | awk -F ' ' '{print $2}'";
-        exec($command, $output, $status);
-        return $output[0];
+        if($this->debug==true) {
+            echo($command."\n");return 22;
+        } else {
+            exec($command, $output, $status);
+            return $output[0];
+        }
     }
 
     public function chk($pid){
         $command    = sprintf("ps aux |awk  -F ' '  '{print $2}'| grep %s", $pid);
-        exec($command, $output, $status);
+        if($this->debug==true) {
+            echo($command."\n");return;
+        } else {
+            exec($command, $output, $status);
+        }
         if((int)$output[0]>0){
             return true;
         } else {
@@ -43,11 +60,20 @@ class Cli
     public function list_all(){
         $command    = sprintf("ps aux | grep -v 'grep' | grep ss-server | awk -F ' ' '{print $2}'");
         //$command    = sprintf("ps aux | grep -v 'grep' | grep ssserver | awk -F ' ' '{print $2}'");
-        exec($command, $out, $status);
+        if($this->debug==true) {
+            echo($command."\n");return;
+        } else {
+            exec($command, $out, $status);
+        }
         return $out;
     }
 
-    static public function test() {
-        return 'test';
+    public function test_check() {
+        $this->debug = true;
+        $this->list_all();
+        $this->run(8888, 'password');
+        $this->stop(8888, 'password');
+        $this->chk(8888);
+        return '';
     }
 }
