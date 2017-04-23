@@ -19,8 +19,9 @@ use App\Libs\Cli;
 */
 
 Route::get('test', function(Request $request) {
-    Log::info('test_api');
-    return Cli::test();
+    //Log::info('test_api');
+    //$cli = new Cli();
+    //return $cli->test_check();
     //return get_weidian_order_info('775013371427196');
 });
 
@@ -36,4 +37,6 @@ Route::group(['middleware' => ['auth.api']], function()
 {
     Route::post('auth', 'Api\UserController@Auth')->name('auth');
     Route::post('user', 'Api\UserController@Dashboard')->name('user_dashboard');
+    Route::post('service/status/{sid?}', 'Api\ServiceController@status')->name('service_status');
+    Route::post('service/buy/{sid}', 'Api\ServiceController@buy')->name('service_buy');
 });

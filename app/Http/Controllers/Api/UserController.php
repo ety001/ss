@@ -148,6 +148,7 @@ class UserController extends Controller
                 // Authentication passed and change md5 hash to the bcrypt hash
                 $user_lib->password = bcrypt($input['password']);
                 $user_lib->save();
+                Auth::attempt(['username' => $input['username'], 'password' => $input['password']]);
                 $token = $this->create_token( Auth::user() );
                 $result = ['status'=>true, 'data'=>['user'=>$token], 'msg'=>['登录成功，正在跳转中...']];
             } else {
@@ -170,8 +171,13 @@ class UserController extends Controller
                                         ->first(),
             'service_status' => false, // todo: cli checks wheather port is alive.
             'ssport' => $user->ssport,
-            'sspass' => $user->sspass
+            'sspass' => $user->sspass,
+            'email' => $user->email,
+            'email_chk' => $user->email_chk,
         ];
+        $result['current_service_detail'] = $result['current_service'] ?
+                                            $result['current_service']->service :
+                                            null;
         return [
             'status'=>true,
             'data'=>$result,

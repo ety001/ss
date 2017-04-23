@@ -13,7 +13,12 @@
                                 </td>
                                 <td width="50%">
                                     服务状态：
-                                    已开通服务 <code>D360型套餐</code>
+                                    <template v-if="current_service">
+                                        已开通服务 <code>{{ current_service_detail.service_name }}</code>
+                                    </template>
+                                    <template v-else>
+                                        还未开通服务
+                                    </template>
                                 </td>
                             </tr>
                         </tbody>
@@ -25,31 +30,31 @@
                                 <td>D1型套餐</td>
                                 <td>1 天</td>
                                 <td>1 RMB</td>
-                                <td><a href="/user-buysave-service_id-1.html" onclick="if(!confirm('是否要购买 D1型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                                <td><a href="javascript:void(0)" v-on:click="buy(1)">购买并开通服务</a></td>
                             </tr>
                             <tr class="warning">
                                 <td>D7型套餐</td>
                                 <td>7 天</td>
                                 <td>3 RMB</td>
-                                <td><a href="/user-buysave-service_id-2.html" onclick="if(!confirm('是否要购买 D7型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                                <td><a href="javascript:void(0)" v-on:click="buy(2)">购买并开通服务</a></td>
                             </tr>
                             <tr class="warning">
                                 <td>D30型套餐</td>
                                 <td>30 天</td>
                                 <td>10 RMB</td>
-                                <td><a href="/user-buysave-service_id-3.html" onclick="if(!confirm('是否要购买 D30型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                                <td><a href="javascript:void(0)" v-on:click="buy(3)">购买并开通服务</a></td>
                             </tr>
                             <tr class="warning">
                                 <td>D90型套餐</td>
                                 <td>90 天</td>
                                 <td>30 RMB</td>
-                                <td><a href="/user-buysave-service_id-4.html" onclick="if(!confirm('是否要购买 D90型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                                <td><a href="javascript:void(0)" v-on:click="buy(4)">购买并开通服务</a></td>
                             </tr>
                             <tr class="warning">
                                 <td>D360型套餐</td>
                                 <td>360 天</td>
                                 <td>60 RMB</td>
-                                <td><a href="/user-buysave-service_id-5.html" onclick="if(!confirm('是否要购买 D360型套餐？注意：购买后无法退款。'))return false;">购买并开通服务</a></td>
+                                <td><a href="javascript:void(0)" v-on:click="buy(5)">购买并开通服务</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -75,6 +80,8 @@
         data() {
             return {
                 money_amount : null,
+                current_service : null,
+                current_service_detail: null,
                 alertDisplay: false,
                 alertMsg: '',
                 alertStatus: ''
@@ -97,6 +104,58 @@
                         that.$router.push({ path: jump });
                     }
                 }, timeout ? timeout : 5000);
+            },
+            buy(sid) {
+                let user_token = this.$cookies.get('user_token');
+                let that = this;
+                let msgs = {
+                    1: '是否要购买 D1型套餐？注意：购买后无法退款。',
+                    2: '是否要购买 D7型套餐？注意：购买后无法退款。',
+                    3: '是否要购买 D30型套餐？注意：购买后无法退款。',
+                    4: '是否要购买 D90型套餐？注意：购买后无法退款。',
+                    5: '是否要购买 D360型套餐？注意：购买后无法退款。'
+                };
+                if(!confirm(msgs[sid]))return false;
+                axios.post('service/buy/'+sid, {api_token: user_token})
+                    .then(res => {
+                        //console.log(res);
+                        switch (res.status) {
+                            case 200:
+                                let data = res.data;
+                                switch (data.status) {
+                                    case true:
+                                        let user_token = this.$cookies.get('user_token');
+                                        axios.post('user', {api_token: user_token})
+                                            .then(res => {
+                                                //console.log(res);
+                                                switch (res.status) {
+                                                    case 200:
+                                                        let data = res.data;
+                                                        switch (data.status) {
+                                                            case true:
+                                                                that.money_amount = data.data.money_amount;
+                                                                that.current_service = data.data.current_service;
+                                                                that.current_service_detail = data.data.current_service_detail;
+                                                                break;
+                                                        }
+                                                        break;
+                                                }
+                                            })
+                                            .catch(err_res => {
+                                                console.log(err_res);
+                                            });
+                                        this.alert(data.msg[0], 'success');
+                                        break;
+                                    case false:
+                                        this.alert(data.msg[0], 'danger');
+                                        break;
+                                }
+                                break;
+                        }
+                    })
+                    .catch(err_res => {
+                        console.log(err_res);
+                    });
             }
         },
         created() {
@@ -111,6 +170,8 @@
                             switch (data.status) {
                                 case true:
                                     that.money_amount = data.data.money_amount;
+                                    that.current_service = data.data.current_service;
+                                    that.current_service_detail = data.data.current_service_detail;
                                     break;
                                 case false:
 

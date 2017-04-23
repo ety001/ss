@@ -86,10 +86,12 @@
                     </table>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div method="post" action="">
-                    <p><input class="form-control" type="email" name="email" value="<?php echo $user_info['email'];?>"></p>
-                    <p><input class="btn btn-primary" type="submit" value="重发验证邮件"></p>
+            <div class="row" v-if="email_chk == 0">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="form">
+                        <input class="form-control" type="email" id="email" v-model="email"><br>
+                        <input class="form-control btn btn-primary" type="submit" value="重发验证邮件">
+                    </div>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px;">
@@ -118,9 +120,11 @@
                 money_amount : null,
                 current_service : null,
                 service_status: null,
+                email: null,
+                email_chk: 0,
                 alertDisplay: false,
                 alertMsg: '',
-                alertStatus: ''
+                alertStatus: '',
             }
         },
         components: {
@@ -129,6 +133,8 @@
         methods: {
             update_data(data) {
                 this.username = data.username;
+                this.email = data.email;
+                this.email_chk = data.email_chk;
                 this.user_type = data.user_type;
                 this.ssport = data.ssport;
                 this.sspass = data.sspass;
